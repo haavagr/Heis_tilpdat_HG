@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <time.h>
-#include "driver/elevio.h"
-
+#include "driver/tilstander.h"
 
 
 int main(){
@@ -11,6 +10,8 @@ int main(){
     
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
+    printf("Hei\n");
+    
 
     elevio_motorDirection(DIRN_UP);
 
