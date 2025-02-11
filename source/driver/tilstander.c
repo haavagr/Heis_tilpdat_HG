@@ -1,55 +1,84 @@
 #include "tilstander.h"
-#include "elevio.h" 
 #include "timer.h"
+#include "IO_funksjoner.h"
+
 
 //globale variabler 
-tilstand *aktiv_tilstand = INITIALISER;
-MotorDirection aktiv_retning;
+tilstand start_tilstand = STILLE;
+tilstand *aktiv_tilstand = &start_tilstand;
+MotorDirection aktiv_retning = DIRN_UP;
 
 
-void stopp_aktivert(tilstand *t){
+void stopp_aktivert(){
     if (elevio_stopButton()){
-        *t = STOPP; 
+        *aktiv_tilstand = STOPP; 
     }
 };
 
-void stille(tilstand *t){
-    if (elevio_stopButton()){
-        *t = STOPP;
-    }
-
+void stille(){
+    
     elevio_doorOpenLamp(1);
-    int *obstruksjon_indikator = 0;
+    elevio_motorDirection(DIRN_UP);
+
+    int obstruksjon_indikator = 0;
+    
     if (elevio_obstruction()) {
         //reset_timer(1); //rest timer
-        *obstruksjon_indikator =  1;
+        obstruksjon_indikator =  1;
         aktiv_retning = DIRN_STOP;   
     }
+    
     //hvis obstruksjonsbryter er slått av og 
-    if (!elevio_obstruction() && *obstruksjon_indikator == 1) {
+    if (!elevio_obstruction() && obstruksjon_indikator == 1){
         reset_timer(1);
         if (nedtelling(3)){
             elevio_doorOpenLamp(0);
             *aktiv_tilstand = VENT;
         }
-        *obstruksjon_indikator = 0;
-
-
+        obstruksjon_indikator = 0;
     }
 
+    *aktiv_tilstand = VENT;
+
+
+
 };
 
-void stopp(tilstand *t) {
+void stopp() {
+    elevio_motorDirection(DIRN_STOP); //stopper heisen
+    int stopp_indikator = 0;
+    all_lys_av();
+    //tøm bestillingskøen
+ 
+    while (elevio_stopButton()) {
+         //Ignorer alle forsøk på bestillinger
 
-};
+        elevio_stopLamp(1);
+        if(elevio_floorSensor()!= -1) {
+            elevio_doorOpenLamp(1); //åpne døren
+            stopp_indikator =  1;
+        }     
+}
+    elevio_stopLamp(0);
+    if (!elevio_stopButton() && stopp_indikator == 0){
+        reset_timer(1);
+        if (nedtelling(3)){
+            elevio_doorOpenLamp(0);
+            *aktiv_tilstand = VENT; //står i ro og venter nye bestillinger
+        }
+    }
+        
 
-void vent(tilstand *t) {
+    };
+
+
+void vent() {
     
 };
-void opp(tilstand *t) {
+void opp() {
     
 };
-void ned(tilstand *t) {
+void ned() {
     
 };
 
@@ -58,33 +87,40 @@ void ned(tilstand *t) {
 void sett_tilstand(){
     switch(*aktiv_tilstand){
         case (INITIALISER):
+        stopp_aktivert();
+        
+
 
         
         break;
 
         case (STILLE):
-        stopp_aktivert(aktiv_tilstand);
-        stille(aktiv_tilstand);
+        stopp_aktivert();
+        stille();
 
         break;
 
         case (STOPP):
-        stopp_aktivert(aktiv_tilstand);
+        stopp_aktivert();
+        stopp();
         
         break;
 
         case (VENT):
-        stopp_aktivert(aktiv_tilstand);
+        printf("Hei\n");
+        stopp_aktivert();
+       
+
         
         break;
 
         case (OPP):
-        stopp_aktivert(aktiv_tilstand);
+        stopp_aktivert();
         
         break;
 
         case (NED):
-        stopp_aktivert(aktiv_tilstand);
+        stopp_aktivert();
         
         break;
 

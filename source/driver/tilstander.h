@@ -1,6 +1,6 @@
 #pragma once
-#include "elevio.h"
-
+#include "IO_funksjoner.h"
+#include <stdio.h>
 
 typedef enum {
     INITIALISER,
@@ -19,6 +19,15 @@ typedef enum{
     FJERDE,
     UDEFINERT = -1
 }etasje;
+
+extern tilstand *aktiv_tilstand;
+void stopp_aktivert();
+void sett_tilstand();
+void stille();
+void stopp();
+void vent();
+void opp();
+void ned();
 
 
 
