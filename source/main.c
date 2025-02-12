@@ -15,16 +15,17 @@ int main(){
     
     
 
-  //elevio_motorDirection(DIRN_UP);
+  elevio_motorDirection(DIRN_UP);
 
     while(1){
+
+        etasjelys();
         
- // printf("Obstruksjon: %d\n", elevio_obstruction());
-  //int floor = elevio_floorSensor();
- // printf("Nåværende etasje: %d\n", floor);
-     sett_tilstand();
-     sett_tilstand();
-/*
+
+        int floor = elevio_floorSensor();
+ 
+     //sett_tilstand();
+
         if(floor == 0){
             elevio_motorDirection(DIRN_UP);
         }
@@ -54,8 +55,8 @@ int main(){
         
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
     }
-        */
+        
 
     return 0;
 }
-}
+

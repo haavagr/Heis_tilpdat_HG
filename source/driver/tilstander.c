@@ -1,4 +1,5 @@
 #include "tilstander.h"
+#include "elevio.h"
 #include "timer.h"
 #include "IO_funksjoner.h"
 
@@ -6,38 +7,37 @@
 //globale variabler 
 tilstand start_tilstand = STILLE;
 tilstand *aktiv_tilstand = &start_tilstand;
-MotorDirection aktiv_retning = DIRN_UP;
 
 
-void stopp_aktivert(){
-    if (elevio_stopButton()){
-        *aktiv_tilstand = STOPP; 
-    }
-};
+
 
 void stille(){
     
     elevio_doorOpenLamp(1);
-    elevio_motorDirection(DIRN_UP);
+    reset_timer(1);
+    while(!nedtelling(3)){
+        elevio_motorDirection(DIRN_STOP);
+        int obstruksjon_indikator = 0;
 
-    int obstruksjon_indikator = 0;
-    
-    if (elevio_obstruction()) {
-        //reset_timer(1); //rest timer
-        obstruksjon_indikator =  1;
-        aktiv_retning = DIRN_STOP;   
-    }
-    
-    //hvis obstruksjonsbryter er slått av og 
-    if (!elevio_obstruction() && obstruksjon_indikator == 1){
-        reset_timer(1);
-        if (nedtelling(3)){
-            elevio_doorOpenLamp(0);
-            *aktiv_tilstand = VENT;
+        if (elevio_obstruction()) {
+            //reset_timer(1); //rest timer
+            obstruksjon_indikator =  1;  
         }
-        obstruksjon_indikator = 0;
+    
+        //hvis obstruksjonsbryter er slått av og 
+        if (!elevio_obstruction() && obstruksjon_indikator == 1){
+            reset_timer(1);
+            if (nedtelling(3)){
+                elevio_doorOpenLamp(0);
+                *aktiv_tilstand = VENT;
+            }
+            obstruksjon_indikator = 0;
+        }
+        
+
     }
 
+    elevio_doorOpenLamp(0);
     *aktiv_tilstand = VENT;
 
 
@@ -54,7 +54,7 @@ void stopp() {
          //Ignorer alle forsøk på bestillinger
 
         elevio_stopLamp(1);
-        if(elevio_floorSensor()!= -1) {
+        if(elevio_floorSensor() != -1) {
             elevio_doorOpenLamp(1); //åpne døren
             stopp_indikator =  1;
         }     
@@ -73,7 +73,12 @@ void stopp() {
 
 
 void vent() {
+
     
+    int aktiv_etasje = elevio_floorSensor();
+
+    
+
 };
 void opp() {
     
@@ -87,7 +92,6 @@ void ned() {
 void sett_tilstand(){
     switch(*aktiv_tilstand){
         case (INITIALISER):
-        stopp_aktivert();
         
 
 
@@ -109,7 +113,7 @@ void sett_tilstand(){
         case (VENT):
         printf("Hei\n");
         stopp_aktivert();
-       
+        printf("Hei2\n");
 
         
         break;
