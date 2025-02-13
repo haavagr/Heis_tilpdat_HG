@@ -1,5 +1,6 @@
 #pragma once
 #include "IO_funksjoner.h"
+#include "kø.h"
 #include <stdio.h>
 
 typedef enum {

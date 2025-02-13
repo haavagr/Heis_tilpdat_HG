@@ -15,76 +15,68 @@ void stille(){
     
     elevio_doorOpenLamp(1);
     reset_timer(1);
-    while(!nedtelling(3)){
-        elevio_motorDirection(DIRN_STOP);
-        int obstruksjon_indikator = 0;
-
-        if (elevio_obstruction()) {
-            //reset_timer(1); //rest timer
-            obstruksjon_indikator =  1;  
-        }
-    
-        //hvis obstruksjonsbryter er slått av og 
-        if (!elevio_obstruction() && obstruksjon_indikator == 1){
-            reset_timer(1);
-            if (nedtelling(3)){
-                elevio_doorOpenLamp(0);
-                *aktiv_tilstand = VENT;
-            }
-            obstruksjon_indikator = 0;
-        }
-        
-
-    }
-
-    elevio_doorOpenLamp(0);
-    *aktiv_tilstand = VENT;
-
-
-
+    elevio_motorDirection(DIRN_STOP); //skal ikke trenges
+    if (nedtelling_dor(3)){
+            elevio_doorOpenLamp(0);
+            *aktiv_tilstand = VENT;
+    } 
 };
 
 void stopp() {
     elevio_motorDirection(DIRN_STOP); //stopper heisen
-    int stopp_indikator = 0;
-    all_lys_av();
+    bestillingslys_av();
     //tøm bestillingskøen
  
-    while (elevio_stopButton()) {
+    while (elevio_stopButton()){
          //Ignorer alle forsøk på bestillinger
 
         elevio_stopLamp(1);
-        if(elevio_floorSensor() != -1) {
-            elevio_doorOpenLamp(1); //åpne døren
-            stopp_indikator =  1;
-        }     
-}
-    elevio_stopLamp(0);
-    if (!elevio_stopButton() && stopp_indikator == 0){
-        reset_timer(1);
-        if (nedtelling(3)){
-            elevio_doorOpenLamp(0);
-            *aktiv_tilstand = VENT; //står i ro og venter nye bestillinger
-        }
+        if (elevio_floorSensor() != -1) {
+            *aktiv_tilstand = STILLE;
+    
+        } else {
+            *aktiv_tilstand = VENT;
+        }    
     }
+    elevio_stopLamp(0);
         
 
     };
 
 
 void vent() {
-
-    
-    int aktiv_etasje = elevio_floorSensor();
-
-    
+    bestillingslys();
+    int etasje = aktiv_etasje();
+    int bestillingsplassering = bestilling_heis();
+    if (bestillingsplassering < etasje) {
+        *aktiv_tilstand = NED;
+    } else if (bestillingsplassering > etasje){
+        *aktiv_tilstand = OPP;
+    } else {
+        *aktiv_tilstand = STILLE;
+    }
 
 };
 void opp() {
-    
+    while (1) {
+        int etasje = aktiv_etasje();
+        lag_liste_opp();
+        elevio_motorDirection(DIRN_UP); //bytter ut
+        for (int i = etasje; i < N_FLOORS; i++){
+            if (lag_liste_opp[etasje] )
+        }
+        if (lag_liste_opp[0] == etasje) {
+            *aktiv_tilstand=STILLE;
+        }
+       
+
+
+    }
 };
 void ned() {
-    
+    elevio_motorDirection(DIRN_DOWN);
+
+     *aktiv_tilstand=STILLE;
 };
 
 
@@ -92,7 +84,7 @@ void ned() {
 void sett_tilstand(){
     switch(*aktiv_tilstand){
         case (INITIALISER):
-        
+        etasjelys();
 
 
         
@@ -100,31 +92,40 @@ void sett_tilstand(){
 
         case (STILLE):
         stopp_aktivert();
+        etasjelys();
         stille();
 
         break;
 
         case (STOPP):
         stopp_aktivert();
+        etasjelys();
         stopp();
-        
+
         break;
 
         case (VENT):
-        printf("Hei\n");
+        etasjelys();
         stopp_aktivert();
-        printf("Hei2\n");
+        vent();
+        
 
         
         break;
 
         case (OPP):
         stopp_aktivert();
+        etasjelys();
+        opp();
         
         break;
 
         case (NED):
         stopp_aktivert();
+        etasjelys();
+        ned();
+        
+
         
         break;
 

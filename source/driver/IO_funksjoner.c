@@ -1,8 +1,11 @@
 #include "IO_funksjoner.h"
 #include "elevio.h"
 
+etasje forrige;
+etasje bestilling;
 
-void all_lys_av(){
+
+void bestillingslys_av(){
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
             elevio_buttonLamp(f, b, 0);
@@ -19,9 +22,13 @@ void stopp_aktivert(){
 void bestillingslys(){
     for(int f = 0; f < N_FLOORS; f++){
         for(int b = 0; b < N_BUTTONS; b++){
-            int btnPressed = elevio_callButton(f, b);
-            elevio_buttonLamp(f, b, btnPressed);
+            if (elevio_callButton(f, b)) {
+                elevio_buttonLamp(f, b, 1);
+            }
         }
+    }
+    if (aktiv_etasje() == bestilling_heis()) {
+        elevio_buttonLamp(aktiv_etasje(), 2, 0);
     }
 };
 
@@ -30,36 +37,31 @@ void etasjelys(){
     int etasje = elevio_floorSensor();
     if (etasje != -1){
         elevio_floorIndicator(etasje);
-        printf("hei\n");
     }
 }
+int aktiv_etasje(){
+    int etasje = elevio_floorSensor();
+    if (etasje != -1){
+        forrige = etasje;
+    }
+    return forrige;
+
+   
+       
+};
 
 int bestilling_heis(){
     for(int f = 0; f < N_FLOORS; f++){
         int btnPressed = elevio_callButton(f, 2);
-        elevio_buttonLamp(f, 2, btnPressed);
-        return f;
+        if (btnPressed) {
+        bestilling = f;
         }
-        return -2; //returner -2 dersom det ikke er noen bestillinger inne i heisen
+        }
+        return bestilling;
+         //returner -2 dersom det ikke er noen bestillinger inne i heisen
     };
 
-int bestilling_etasje_ned(){
-    for(int f = 0; f < N_FLOORS; f++){
-        int btnPressed = elevio_callButton(f, 1);
-        elevio_buttonLamp(f, 1, btnPressed);
-        return f;
-    }
-        return -2;
-};
 
-int bestilling_etasje_opp(){
-    for(int f = 0; f < N_FLOORS; f++){
-        int btnPressed = elevio_callButton(f, 0);
-        elevio_buttonLamp(f, 0, btnPressed);
-        return f;
-    }
-        return -2;
-};
 
 
 
