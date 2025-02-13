@@ -1,5 +1,4 @@
 #pragma once
-
 #include "elevio.h"
 #include "tilstander.h"
 

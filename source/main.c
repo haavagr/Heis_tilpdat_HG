@@ -24,7 +24,7 @@ int main(){
 
         int floor = elevio_floorSensor();
  
-     //sett_tilstand();
+     sett_tilstand();
 
         if(floor == 0){
             elevio_motorDirection(DIRN_UP);
@@ -35,7 +35,7 @@ int main(){
         }
 
         bestillingslys();
-        printf("Bestillimng: %d\n", bestilling_heis());
+        
         
         /*
         for(int f = 0; f < N_FLOORS; f++){
@@ -54,7 +54,7 @@ int main(){
         
         if(elevio_stopButton()){
             bestillingslys_av();
-            stille();
+            opp();
 
             //elevio_motorDirection(DIRN_STOP);
             break;

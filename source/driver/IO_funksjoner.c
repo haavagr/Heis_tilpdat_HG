@@ -1,5 +1,5 @@
 #include "IO_funksjoner.h"
-#include "elevio.h"
+
 
 etasje forrige;
 etasje bestilling;

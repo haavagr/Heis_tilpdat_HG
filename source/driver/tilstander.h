@@ -1,5 +1,6 @@
 #pragma once
 #include "IO_funksjoner.h"
+#include "timer.h"
 #include "kø.h"
 #include <stdio.h>
 

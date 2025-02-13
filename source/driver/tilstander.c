@@ -1,7 +1,6 @@
 #include "tilstander.h"
-#include "elevio.h"
-#include "timer.h"
-#include "IO_funksjoner.h"
+
+
 
 
 //globale variabler 
@@ -12,7 +11,7 @@ tilstand *aktiv_tilstand = &start_tilstand;
 
 
 void stille(){
-    
+    elevio_motorDirection(DIRN_STOP);
     elevio_doorOpenLamp(1);
     reset_timer(1);
     elevio_motorDirection(DIRN_STOP); //skal ikke trenges
@@ -58,25 +57,35 @@ void vent() {
 
 };
 void opp() {
-    while (1) {
-        int etasje = aktiv_etasje();
+    while (1)
+    {
+   
+    
         lag_liste_opp();
         elevio_motorDirection(DIRN_UP); //bytter ut
-        for (int i = etasje; i < N_FLOORS; i++){
-            if (lag_liste_opp[etasje] )
-        }
-        if (lag_liste_opp[0] == etasje) {
-            *aktiv_tilstand=STILLE;
-        }
-       
-
-
+        printf("Bestillimng:\n");
+        for (int i = aktiv_etasje(); i < N_FLOORS; i++){
+            if (i < N_FLOORS - 1 && opp_liste->ordre[i + 1] == 1) {
+                *aktiv_tilstand=STILLE;
+        } else if (aktiv_etasje() == 3){
+                *aktiv_tilstand = STILLE;
+        } else {
+            *aktiv_tilstand = OPP;
+            }
     }
+}
 };
 void ned() {
     elevio_motorDirection(DIRN_DOWN);
-
-     *aktiv_tilstand=STILLE;
+    for (int i = aktiv_etasje(); i < N_FLOORS; i++){
+    if (ned_liste -> ordre[aktiv_etasje() - 1] == 1) {
+            *aktiv_tilstand=STILLE;
+    } else if (aktiv_etasje() == 0){
+        *aktiv_tilstand = STILLE;
+    } else {
+        *aktiv_tilstand = NED;
+    }
+}
 };
 
 

@@ -1,43 +1,42 @@
 #include "kø.h"
-#include "tilstander.h"
+#include <stdlib.h>
 #include <stdio.h>
 
-etasje bestilling;
+
+ordrekø *opp_liste;
+ordrekø *ned_liste;
 
 
-
-int opp_liste[N_FLOORS];
-int ned_liste[N_FLOORS];
 
 void lag_liste_ned(){
+    if (ned_liste == NULL) {
+        ned_liste = malloc(sizeof(ordrekø));
+    }
     int bestilling_innside_heis = bestilling_heis();
     if (bestilling_innside_heis < aktiv_etasje()){
-        ned_liste[bestilling_innside_heis] = 1;
+        ned_liste -> ordre[bestilling_innside_heis] = 1;
     }
-    for(int f = N_FLOORS; f >= 0; f--){
+    for(int f = 0; f < N_FLOORS; f++){
         int btnPressed = elevio_callButton(f, 1);
-        ned_liste[f] = btnPressed;
+        ned_liste -> ordre[f] = btnPressed;
     }
 };
 
 void lag_liste_opp(){
+    if (opp_liste == NULL) {
+        opp_liste = malloc(sizeof(ordrekø));
+    }
     int bestilling_innside_heis = bestilling_heis();
     if (bestilling_innside_heis > aktiv_etasje()){
-        opp_liste[bestilling_innside_heis] = 1;
+        opp_liste -> ordre[bestilling_innside_heis] = 1;
     }
     for(int f = 0; f < N_FLOORS; f++){
         int btnPressed = elevio_callButton(f, 0);
-        opp_liste[f] = btnPressed;
+        opp_liste -> ordre[f] = btnPressed;
     }
 };
 
 
-
-void lag_kø(ordrekø *opp, ordrekø *ned, int aktiv_etasje){
-    for (int f = 0; f < N_FLOORS; f++) {
-        
-    }
-}
 
 
 
