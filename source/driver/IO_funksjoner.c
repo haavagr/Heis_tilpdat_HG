@@ -24,12 +24,13 @@ void bestillingslys(){
         for(int b = 0; b < N_BUTTONS; b++){
             if (elevio_callButton(f, b)) {
                 elevio_buttonLamp(f, b, 1);
-            }
+            } //trenger kode for å skru av lys utenfor kabinen
         }
     }
     if (aktiv_etasje() == bestilling_heis()) {
         elevio_buttonLamp(aktiv_etasje(), 2, 0);
     }
+
 };
 
 

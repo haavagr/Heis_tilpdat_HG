@@ -23,6 +23,7 @@ typedef enum{
 }etasje;
 
 extern tilstand *aktiv_tilstand;
+void initialiser();
 void stopp_aktivert();
 void sett_tilstand();
 void stille();

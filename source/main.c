@@ -19,12 +19,11 @@ int main(){
 
     while(1){
 
-        etasjelys();
         
 
         int floor = elevio_floorSensor();
  
-     sett_tilstand();
+
 
         if(floor == 0){
             elevio_motorDirection(DIRN_UP);
@@ -34,7 +33,7 @@ int main(){
             elevio_motorDirection(DIRN_DOWN);
         }
 
-        bestillingslys();
+
         
         
         /*
@@ -53,10 +52,9 @@ int main(){
         }
         
         if(elevio_stopButton()){
-            bestillingslys_av();
-            opp();
+            
 
-            //elevio_motorDirection(DIRN_STOP);
+            elevio_motorDirection(DIRN_STOP);
             break;
         }
         
