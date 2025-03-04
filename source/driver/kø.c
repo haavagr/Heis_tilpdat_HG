@@ -25,6 +25,15 @@ void lag_liste_ned(){
 
     }
 };
+int hent_neste_opp() {
+    for (int f = 0; f < N_FLOORS; f++){
+        if (opp_liste -> ordre[f] == 1){
+            return f;
+        } else {
+            return -1;
+        }
+    }
+};
 
 void lag_liste_opp(){
     if (opp_liste == NULL) {
@@ -43,7 +52,15 @@ void lag_liste_opp(){
     }
 };
 
-
+int hent_neste_ned() {
+    for (int f =aktiv_etasje(); f >= 0; f--){
+        if (ned_liste -> ordre[f] == 1){
+            return f;
+        }else {
+            return -1;
+        }
+    }
+};
 
 
 

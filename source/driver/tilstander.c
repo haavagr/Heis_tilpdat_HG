@@ -8,6 +8,8 @@ tilstand start_tilstand = INITIALISER;
 tilstand *aktiv_tilstand = &start_tilstand;
 tilstand *forrige_tilstand = &start_tilstand;
 
+int aktiv_retning = 1;
+
 
 
 
@@ -54,22 +56,17 @@ void stopp() {
 void vent() {
     
     int etasje = aktiv_etasje();
-    
-    if (bestillingsplassering < etasje) {
-        *aktiv_tilstand = NED;
-    } else if (bestillingsplassering > etasje){
+    if (aktiv_retning == 1 && hent_neste_opp()!= -1) {
         *aktiv_tilstand = OPP;
+    } else if (aktiv_retning == -1 && hent_neste_ned()!= -1) {
+        *aktiv_tilstand = NED;
     } else {
-        *aktiv_tilstand = STILLE;
+        *aktiv_tilstand = VENT;
     }
-
 };
-void opp() {
-    while (1)
-    {
-   
-    
 
+void opp() {
+        aktiv_retning = 1;
         elevio_motorDirection(DIRN_UP); //byttes ut
         for (int i = aktiv_etasje(); i < N_FLOORS; i++){
             if (i < N_FLOORS - 1 && opp_liste->ordre[i + 1] == 1) {
@@ -80,21 +77,29 @@ void opp() {
             *aktiv_tilstand = OPP;
             }
     }
-}
+    if (hent_neste_opp() == aktiv_etasje()){
+        opp_liste -> ordre[aktiv_etasje()] = 0;
+    
+    }
 };
 
-void ned() {
 
+void ned() {
+    aktiv_retning = 0;
     elevio_motorDirection(DIRN_DOWN); //byttes ut
     for (int i = aktiv_etasje(); i < N_FLOORS; i++){
     if (ned_liste -> ordre[aktiv_etasje() - 1] == 1) {
-            *aktiv_tilstand=STILLE;
+            *aktiv_tilstand = STILLE;
     } else if (aktiv_etasje() == 0){
         *aktiv_tilstand = STILLE;
     } else {
         *aktiv_tilstand = NED;
+        }
+    }   
+    if (hent_neste_ned() == aktiv_etasje()){
+        ned_liste -> ordre[aktiv_etasje()] = 0;
+
     }
-}
 };
 
 void initialiser(){

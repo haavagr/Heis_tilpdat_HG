@@ -18,8 +18,9 @@ int main(){
   elevio_motorDirection(DIRN_UP);
 
     while(1){
-
+        sett_tilstand();
         
+        /*
 
         int floor = elevio_floorSensor();
  
@@ -43,7 +44,7 @@ int main(){
                 elevio_buttonLamp(f, b, btnPressed);
             }
         }
-            */
+            
 
         if(elevio_obstruction()){
             elevio_stopLamp(1);
@@ -59,6 +60,7 @@ int main(){
         }
         
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
+        */
     }
         
 

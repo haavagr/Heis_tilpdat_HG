@@ -22,6 +22,7 @@ typedef enum{
     UDEFINERT = -1
 }etasje;
 
+
 extern tilstand *aktiv_tilstand;
 void initialiser();
 void stopp_aktivert();
