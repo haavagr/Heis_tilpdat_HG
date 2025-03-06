@@ -24,11 +24,10 @@ void bestillingslys(){
         for(int b = 0; b < N_BUTTONS; b++){
             if (elevio_callButton(f, b)) {
                 elevio_buttonLamp(f, b, 1);
-            } //trenger kode for å skru av lys utenfor kabinen
+            } else if (f == elevio_floorSensor()){
+                elevio_buttonLamp(f, b, 0);
+            }
         }
-    }
-    if (aktiv_etasje() == bestilling_heis()) {
-        elevio_buttonLamp(aktiv_etasje(), 2, 0);
     }
 
 };
@@ -52,14 +51,14 @@ int aktiv_etasje(){
 };
 
 int bestilling_heis(){
-    for(int f = 0; f < N_FLOORS; f++){
+    for (int f = 0; f < N_FLOORS; f++){
         int btnPressed = elevio_callButton(f, 2);
         if (btnPressed) {
-        bestilling = f;
+            bestilling = f;
+            return f;
         }
-        }
-        return bestilling;
-         //returner -2 dersom det ikke er noen bestillinger inne i heisen
+    }
+        return -2; //dersom det ikke er noen bestillinger inne i heisen
     };
 
 

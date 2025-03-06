@@ -13,3 +13,4 @@ void lag_liste_ned();
 void lag_liste_opp();
 int hent_neste_opp();
 int hent_neste_ned();
+void tom_lister ();

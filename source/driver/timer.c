@@ -23,6 +23,10 @@ int nedtelling(double sekunder){
 int nedtelling_dor(double sekunder){
 
     while (sekunder >= difftime(aktiv_tid,starttid)){
+        lag_liste_opp();
+        lag_liste_ned();
+        etasjelys();
+        bestillingslys();
         aktiv_tid = time(NULL);
         if (elevio_obstruction()) {
             starttid = time(NULL);
