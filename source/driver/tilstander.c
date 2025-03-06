@@ -65,19 +65,25 @@ void vent() {
 };
 
 void opp() {
+        lag_liste_opp();
+        lag_liste_ned();
         aktiv_retning = 1;
         int etasje = elevio_floorSensor();
         elevio_motorDirection(DIRN_UP); //byttes ut
         if (etasje != -1){
+            
             if (opp_liste->ordre[etasje] == 1) {
                 opp_liste -> ordre[etasje] = 0;
+                ned_liste -> ordre[etasje] = 0;
                 *aktiv_tilstand = STILLE;
-            } else if (etasje == 3){
-                    *aktiv_tilstand = STILLE;
-        } else {
-            *aktiv_tilstand = OPP;
+                    printf("=== ===\n");
+            } else {
+                *aktiv_tilstand = OPP;
             }
-    }
+        } 
+        if (etasje == 3){
+            *aktiv_tilstand = STILLE;
+        }
     
 };
 
@@ -89,13 +95,15 @@ void ned() {
     if (etasje != -1){
         if (ned_liste -> ordre[etasje] == 1) {
             ned_liste -> ordre[etasje] = 0;
+            opp_liste -> ordre[etasje] = 0;
             *aktiv_tilstand = STILLE;
-        } else if (etasje == 0){
-            *aktiv_tilstand = STILLE;
-    } else {
+        } else {
         *aktiv_tilstand = NED;
         }
     }
+    if (etasje == 0){
+        *aktiv_tilstand = STILLE;
+}
 };
 
 void initialiser(){
@@ -156,8 +164,7 @@ void sett_tilstand(){
         break;
 
         case (OPP):
-        lag_liste_opp();
-        lag_liste_ned();
+        
         stopp_aktivert();
         etasjelys();
         bestillingslys();

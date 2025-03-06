@@ -17,8 +17,10 @@ void lag_liste_ned(){
         ned_liste -> ordre[bestilling_innside_heis] = 1;
     }
     for (int f = aktiv_etasje(); f >= 0; f--){
-        int btnPressed = elevio_callButton(f, 1);
-        if (btnPressed == 1){
+
+        int btnPressed_opp = elevio_callButton(f,1);
+        int btnPressed_ned = elevio_callButton(f,0);
+        if (btnPressed_opp || btnPressed_ned == 1){
             ned_liste -> ordre[f] = 1;
         }
     }
@@ -41,15 +43,17 @@ void lag_liste_opp(){
         opp_liste -> ordre[bestilling_innside_heis] = 1;
     }
     for (int f = aktiv_etasje(); f < N_FLOORS; f++){
-        int btnPressed = elevio_callButton(f, 0);
-        if (btnPressed == 1){
+        
+        int btnPressed_ned = elevio_callButton(f,0);
+        int btnPressed_opp = elevio_callButton(f,1);
+        if (btnPressed_opp || btnPressed_ned == 1){
             opp_liste -> ordre[f] = 1;
         }
     }
 };
 
 int hent_neste_ned() {
-    for (int f =aktiv_etasje(); f >= 0; f--){
+    for (int f = aktiv_etasje(); f >= 0; f--){
         if (ned_liste -> ordre[f] == 1){
             return f;
         }
