@@ -54,11 +54,10 @@ void stopp() {
 
 
 void vent() {
-    
     int etasje = aktiv_etasje();
-    if (aktiv_retning == 1 && hent_neste_opp()!= -1) {
+    if (hent_neste_opp()!= -1) {
         *aktiv_tilstand = OPP;
-    } else if (aktiv_retning == -1 && hent_neste_ned()!= -1) {
+    } else if (hent_neste_ned()!= -1) {
         *aktiv_tilstand = NED;
     } else {
         *aktiv_tilstand = VENT;
@@ -67,38 +66,35 @@ void vent() {
 
 void opp() {
         aktiv_retning = 1;
+        int etasje = elevio_floorSensor();
         elevio_motorDirection(DIRN_UP); //byttes ut
-        for (int i = aktiv_etasje(); i < N_FLOORS; i++){
-            if (i < N_FLOORS - 1 && opp_liste->ordre[i + 1] == 1) {
+        if (etasje != -1){
+            if (opp_liste->ordre[etasje] == 1) {
+                opp_liste -> ordre[etasje] = 0;
                 *aktiv_tilstand = STILLE;
-        } else if (aktiv_etasje() == 3){
-                *aktiv_tilstand = STILLE;
+            } else if (etasje == 3){
+                    *aktiv_tilstand = STILLE;
         } else {
             *aktiv_tilstand = OPP;
             }
     }
-    if (hent_neste_opp() == aktiv_etasje()){
-        opp_liste -> ordre[aktiv_etasje()] = 0;
     
-    }
 };
 
 
 void ned() {
     aktiv_retning = 0;
+    int etasje = elevio_floorSensor();
     elevio_motorDirection(DIRN_DOWN); //byttes ut
-    for (int i = aktiv_etasje(); i < N_FLOORS; i++){
-    if (ned_liste -> ordre[aktiv_etasje() - 1] == 1) {
+    if (etasje != -1){
+        if (ned_liste -> ordre[etasje] == 1) {
+            ned_liste -> ordre[etasje] = 0;
             *aktiv_tilstand = STILLE;
-    } else if (aktiv_etasje() == 0){
-        *aktiv_tilstand = STILLE;
+        } else if (etasje == 0){
+            *aktiv_tilstand = STILLE;
     } else {
         *aktiv_tilstand = NED;
         }
-    }   
-    if (hent_neste_ned() == aktiv_etasje()){
-        ned_liste -> ordre[aktiv_etasje()] = 0;
-
     }
 };
 

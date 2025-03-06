@@ -16,23 +16,20 @@ void lag_liste_ned(){
     if (bestilling_innside_heis < aktiv_etasje()){
         ned_liste -> ordre[bestilling_innside_heis] = 1;
     }
-    for (int f = 0; f < N_FLOORS; f++){
+    for (int f = aktiv_etasje(); f >= 0; f--){
         int btnPressed = elevio_callButton(f, 1);
-        ned_liste -> ordre[f] = btnPressed;
-        if (aktiv_etasje() == f){
-            ned_liste -> ordre[f] = 0;
+        if (btnPressed == 1){
+            ned_liste -> ordre[f] = 1;
         }
-
     }
 };
 int hent_neste_opp() {
-    for (int f = 0; f < N_FLOORS; f++){
+    for (int f = aktiv_etasje(); f < N_FLOORS; f++){
         if (opp_liste -> ordre[f] == 1){
             return f;
-        } else {
-            return -1;
         }
     }
+    return -1;
 };
 
 void lag_liste_opp(){
@@ -43,11 +40,10 @@ void lag_liste_opp(){
     if (bestilling_innside_heis > aktiv_etasje()){
         opp_liste -> ordre[bestilling_innside_heis] = 1;
     }
-    for (int f = 0; f < N_FLOORS; f++){
+    for (int f = aktiv_etasje(); f < N_FLOORS; f++){
         int btnPressed = elevio_callButton(f, 0);
-        opp_liste -> ordre[f] = btnPressed;
-        if (aktiv_etasje() == f){
-            opp_liste -> ordre[f] = 0;
+        if (btnPressed == 1){
+            opp_liste -> ordre[f] = 1;
         }
     }
 };
@@ -56,10 +52,9 @@ int hent_neste_ned() {
     for (int f =aktiv_etasje(); f >= 0; f--){
         if (ned_liste -> ordre[f] == 1){
             return f;
-        }else {
-            return -1;
         }
     }
+    return -1;
 };
 
 
