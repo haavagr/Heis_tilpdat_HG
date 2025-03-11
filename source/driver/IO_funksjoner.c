@@ -24,7 +24,7 @@ void bestillingslys(){
         for(int b = 0; b < N_BUTTONS; b++){
             if (elevio_callButton(f, b)) {
                 elevio_buttonLamp(f, b, 1);
-            } else if (f == elevio_floorSensor()){
+            } else if ((f == elevio_floorSensor()) && (*aktiv_tilstand == STILLE)){
                 elevio_buttonLamp(f, b, 0);
             }
         }

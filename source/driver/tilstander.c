@@ -6,9 +6,9 @@
 //globale variabler 
 tilstand start_tilstand = INITIALISER;
 tilstand *aktiv_tilstand = &start_tilstand;
-tilstand *forrige_tilstand = &start_tilstand;
 
-int aktiv_retning = 1;
+
+
 
 
 
@@ -20,7 +20,7 @@ void stille(){
     bestillingslys();
     elevio_doorOpenLamp(1);
     reset_timer(1);
-    elevio_motorDirection(DIRN_STOP); //skal ikke trenges
+    elevio_motorDirection(DIRN_STOP); 
     if (nedtelling_dor(3)){
             elevio_doorOpenLamp(0);
             *aktiv_tilstand = VENT;
@@ -28,7 +28,6 @@ void stille(){
 };
 
 void stopp() {
-    printf("h\n");
     elevio_motorDirection(DIRN_STOP); //stopper heisen
     bestillingslys_av();
     tom_lister (); //tømmer bestillingskøen
@@ -42,6 +41,7 @@ void stopp() {
 
         elevio_stopLamp(1);
         if (elevio_floorSensor() != -1) {
+            elevio_doorOpenLamp(1);
             *aktiv_tilstand = STILLE;
     
         } else {
@@ -63,14 +63,11 @@ void vent() {
     lag_liste_ned();
     etasjelys();
     bestillingslys();
-    int etasje = aktiv_etasje();
-    int neste_opp=hent_neste_opp();
-    int neste_ned=hent_neste_ned();
+    int neste_opp = hent_neste_opp();
+    int neste_ned = hent_neste_ned();
     if (neste_opp != -1) {
-        printf ("Neste etasje: %d\n", hent_neste_opp());
         *aktiv_tilstand = OPP;
     } else if (neste_ned != -1) {
-        printf ("Neste etasje: %d\n", hent_neste_ned());
         *aktiv_tilstand = NED;
     } else {
         *aktiv_tilstand = VENT;
@@ -83,9 +80,8 @@ void opp() {
         stopp_aktivert();
         etasjelys();
         bestillingslys();
-        aktiv_retning = 1;
         int etasje = elevio_floorSensor();
-        elevio_motorDirection(DIRN_UP); //byttes u
+        elevio_motorDirection(DIRN_UP);
         if (etasje != -1){
             
             if (opp_liste->ordre[etasje] == 1) {
@@ -110,9 +106,8 @@ void ned() {
     stopp_aktivert();
     etasjelys();
     bestillingslys();
-    aktiv_retning = 0;
     int etasje = elevio_floorSensor();
-    elevio_motorDirection(DIRN_DOWN); //byttes ut
+    elevio_motorDirection(DIRN_DOWN); 
     if (etasje != -1){
         if (ned_liste -> ordre[etasje] == 1) {
             ned_liste -> ordre[etasje] = 0;
