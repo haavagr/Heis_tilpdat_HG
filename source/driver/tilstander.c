@@ -30,14 +30,8 @@ void stille(){
 void stopp() {
     elevio_motorDirection(DIRN_STOP); //stopper heisen
     bestillingslys_av();
-    tom_lister (); //tømmer bestillingskøen
-
- 
     while (elevio_stopButton()){
-        for (int f = 0; f < N_FLOORS; f++){ //ignorerer alle forsøk på bestillinger mens stoppknappen er trykket ned
-            ned_liste -> ordre[f] = 0;
-            opp_liste -> ordre[f] = 0;
-            }
+        tom_lister (); //tømmer bestillingskøen
 
         elevio_stopLamp(1);
         if (elevio_floorSensor() != -1) {
@@ -49,8 +43,6 @@ void stopp() {
         }    
     }
     elevio_stopLamp(0);
-        
-
     };
 
 
